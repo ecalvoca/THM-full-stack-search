@@ -1,5 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { getCodeSandboxHost } from "@codesandbox/utils";
+import SearchResultsList from "./components/SearchResultsList.tsx";
+import SearchBar from "./components/SearchBar.tsx";
 
 type Hotel = { _id: string, chain_name: string; hotel_name: string; city: string, country: string };
 
@@ -21,18 +23,27 @@ const fetchAndFilterHotels = async (value: string) => {
 function App() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [showClearBtn, setShowClearBtn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
+    setSearchTerm(event.target.value);
+
+    if (searchTerm === '') {
       setHotels([]);
       setShowClearBtn(false);
       return;
     }
 
-    const filteredHotels = await fetchAndFilterHotels(event.target.value)
+    const filteredHotels = await fetchAndFilterHotels(searchTerm)
     setShowClearBtn(true);
     setHotels(filteredHotels);
   };
+
+  const emptyData = () => {
+    setHotels([]);
+    setSearchTerm("");
+  };
+
 
   return (
     <div className="App">
@@ -40,32 +51,10 @@ function App() {
         <div className="row height d-flex justify-content-center align-items-center">
           <div className="col-md-6">
             <div className="dropdown">
-              <div className="form">
-                <i className="fa fa-search"></i>
-                <input
-                  type="text"
-                  className="form-control form-input"
-                  placeholder="Search accommodation..."
-                  onChange={fetchData}
-                />
-                {showClearBtn && (
-                  <span className="left-pan">
-                    <i className="fa fa-close"></i>
-                  </span>
-                )}
-              </div>
-              {!!hotels.length && (
+              <SearchBar searchTerm={searchTerm} onSearchChange={fetchData} showClearBtn={showClearBtn} onClear={emptyData} />
+              {showClearBtn && (
                 <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
-                  <h2>Hotels</h2>
-                  {hotels.length ? hotels.map((hotel, index) => (
-                    <li key={index}>
-                      <a href={`/hotels/${hotel._id}`} className="dropdown-item">
-                        <i className="fa fa-building mr-2"></i>
-                        {hotel.hotel_name}
-                      </a>
-                      <hr className="divider" />
-                    </li>
-                  )) : <p>No hotels matched</p>}
+                  <SearchResultsList results={hotels} typeSearch={"hotels"} title={"Hotels"}/>
                   <h2>Countries</h2>
                   <p>No countries matched</p>
                   <h2>Cities</h2>
