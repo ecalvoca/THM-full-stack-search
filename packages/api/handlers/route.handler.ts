@@ -7,7 +7,7 @@ import { ObjectId } from "mongodb";
  * @param collectionName - the collection name
  * @param projection - the fields to return
  */
-export const getAllItems = (collectionName: string, projection?: Record<string, 1>) => async (req: Request, res: Response) => {
+export const getAllItems = (collectionName: string, projection?: Record<string, any>) => async (req: Request, res: Response) => {
     try {
         const collection = collections[collectionName as keyof typeof collections];
         if (!collection) {
@@ -27,7 +27,7 @@ export const getAllItems = (collectionName: string, projection?: Record<string, 
  * Get an item from a collection by _id
  * @param collectionName - the collection name
  */
-export const getItemById = (collectionName: string) => async (req: Request, res: Response) => {
+export const getItemById = (collectionName: string, projection?: Record<string, any>) => async (req: Request, res: Response) => {
     try {
         const collection = collections[collectionName as keyof typeof collections];
         if (!collection) {
@@ -39,7 +39,7 @@ export const getItemById = (collectionName: string) => async (req: Request, res:
             return res.status(400).json({ error: "Invalid ID format" });
         }
 
-        const item = await collection.findOne({ _id: new ObjectId(id) });
+        const item = await collection.findOne({ _id: new ObjectId(id) }, { projection });
 
         if (!item) {
             return res.status(404).json({ error: `${collectionName.slice(0, -1)} not found` });

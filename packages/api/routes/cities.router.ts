@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllItems, getItemById } from "../handlers/routeHandler";
+import { getAllItems, getItemById } from "../handlers/route.handler";
 
 export const citiesRouter = express.Router();
 
