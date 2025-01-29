@@ -1,72 +1,19 @@
-import { useState, type ChangeEvent } from 'react';
-import { getCodeSandboxHost } from "@codesandbox/utils";
-import SearchResultsList from "./components/SearchResultsList.tsx";
-import SearchBar from "./components/SearchBar.tsx";
+import React from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import HomePage from "./pages/HomePage.tsx";
+import HotelPage from "./pages/HotelPage.tsx";
+import CountryPage from "./pages/CountryPage.tsx";
+import CityPage from "./pages/CityPage.tsx";
 
-type Hotel = { _id: string, chain_name: string; hotel_name: string; city: string, country: string };
-
-const codeSandboxHost = getCodeSandboxHost(3001)
-const API_URL = codeSandboxHost ? `https://${codeSandboxHost}` : 'http://localhost:3001'
-
-const fetchAndFilterHotels = async (value: string) => {
-  const hotelsData = await fetch(`${API_URL}/hotels`);
-  const hotels = (await hotelsData.json()) as Hotel[];
-  return hotels.filter(
-    ({ chain_name, hotel_name, city, country }) =>
-      chain_name.toLowerCase().includes(value.toLowerCase()) ||
-      hotel_name.toLowerCase().includes(value.toLowerCase()) ||
-      city.toLowerCase().includes(value.toLowerCase()) ||
-      country.toLowerCase().includes(value.toLowerCase())
-  );
+export default function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/hotel/:id" element={<HotelPage />} />
+                <Route path="/country/:id" element={<CountryPage />} />
+                <Route path="/city/:id" element={<CityPage />} />
+            </Routes>
+        </Router>
+    );
 }
-
-function App() {
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [showClearBtn, setShowClearBtn] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const fetchData = async (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-
-    if (searchTerm === '') {
-      setHotels([]);
-      setShowClearBtn(false);
-      return;
-    }
-
-    const filteredHotels = await fetchAndFilterHotels(searchTerm)
-    setShowClearBtn(true);
-    setHotels(filteredHotels);
-  };
-
-  const emptyData = () => {
-    setHotels([]);
-    setSearchTerm("");
-  };
-
-
-  return (
-    <div className="App">
-      <div className="container">
-        <div className="row height d-flex justify-content-center align-items-center">
-          <div className="col-md-6">
-            <div className="dropdown">
-              <SearchBar searchTerm={searchTerm} onSearchChange={fetchData} showClearBtn={showClearBtn} onClear={emptyData} />
-              {showClearBtn && (
-                <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
-                  <SearchResultsList results={hotels} typeSearch={"hotels"} title={"Hotels"}/>
-                  <h2>Countries</h2>
-                  <p>No countries matched</p>
-                  <h2>Cities</h2>
-                  <p>No cities matched</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default App;
