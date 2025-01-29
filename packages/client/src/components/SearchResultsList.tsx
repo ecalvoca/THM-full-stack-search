@@ -1,19 +1,15 @@
+import {CityType} from "../types/CityType.ts";
+import {CountryType} from "../types/CountryType.ts";
+import {HotelType} from "../types/HotelType.ts";
 
-function getNameField (result, typeSearch: string): string
-{
-    switch (typeSearch) {
-        case "hotels":
-            return result.hotel_name;
-        case "countries":
-            return result.country;
-        case "cities":
-            return result.city;
-        default:
-            return "";
-    }
+interface SearchResultsListProps {
+    results: (HotelType | CountryType | CityType)[];
+    page: string;
+    title: string;
 }
 
-export default function SearchResultsList({ results, typeSearch, title }) {
+
+const SearchResultsList: React.FC<SearchResultsListProps> = ({ results, page, title }) => {
     return (
         <>
             <h2>{title}</h2>
@@ -22,9 +18,9 @@ export default function SearchResultsList({ results, typeSearch, title }) {
             ) : (
                 results.map((result) => (
                     <li key={result._id}>
-                        <a href={`/${typeSearch}/${result._id}`} className="dropdown-item">
+                        <a href={`/${page}/${result._id}`} className="dropdown-item">
                             <i className="fa fa-building mr-2"></i>
-                            {getNameField(result, typeSearch)}
+                            {result.name}
                         </a>
                         <hr className="divider"/>
                     </li>
@@ -33,3 +29,5 @@ export default function SearchResultsList({ results, typeSearch, title }) {
         </>
     );
 }
+
+export default SearchResultsList;
