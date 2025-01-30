@@ -1,14 +1,14 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState} from "react";
-import { fetchById } from "../services/apiService.ts";
 import { Endpoint } from "../services/apiEndpoints.ts";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { fetchById } from "../services/apiService.ts";
+
 
 /**
- * Display the name of a Hotel | City | Country
- * by getting the id from the parameters and using apiService to fetch data
+ * Get id with useParams hook and use apiService to fetch data by id
  * @param endpoint
  */
-export default function DetailsPage({ endpoint } : { endpoint: Endpoint }) {
+export default function useFetchDetails(endpoint: Endpoint) {
     const [details, setDetails] = useState("");
     const { id } = useParams();
 
@@ -19,6 +19,7 @@ export default function DetailsPage({ endpoint } : { endpoint: Endpoint }) {
                 const data = await fetchById(id, endpoint);
                 setDetails(data ? data.name : "Not found");
             } catch (error) {
+                console.error("Fetch error:", error);
                 setDetails("Not found");
             }
         };
@@ -26,13 +27,5 @@ export default function DetailsPage({ endpoint } : { endpoint: Endpoint }) {
         fetchData();
     }, [id, endpoint]);
 
-    return (
-        <div className="App">
-            <div className="container">
-                <div className="row height d-flex justify-content-center align-items-center">
-                    <h2>{details}</h2>
-                </div>
-            </div>
-        </div>
-    );
+    return details;
 }
