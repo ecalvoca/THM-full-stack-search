@@ -22,6 +22,11 @@ try {
   await db.collection("cities").insertMany(cities);
   await db.collection("countries").insertMany(countries);
   await db.collection("hotels").insertMany(hotels);
+  // create indexes
+  await db.collection("hotels").createIndexes([{key: {hotel_name: "text"}}]);
+  await db.collection("hotels").createIndexes([{key: {country: 1}}]);
+  await db.collection("countries").createIndexes([{key: {country: 1}}]);
+  await db.collection("cities").createIndexes([{key: {name: 1}}]);
 } catch (error) {
   console.error("Error seeding database:", error);
 } finally {
