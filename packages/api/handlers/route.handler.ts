@@ -1,20 +1,24 @@
 import { Request, Response } from "express";
 import { collections } from "../services/database.service";
 import { ObjectId } from "mongodb";
+import { searchQueryBuilder } from "../utils/search.query.builder";
 
 /**
- * Get all the items in a collection
- * @param collectionName - the collection name
- * @param projection - the fields to return
+ * Find items by search term searchTerm
+ * Uses searchQueryBuilder to build the query for the collection collectionName
+ * If specified, only returns the fields in projection
+ * @param collectionName
+ * @param projection
  */
-export const getAllItems = (collectionName: string, projection?: Record<string, any>) => async (req: Request, res: Response) => {
+export const findItemByTerm = (collectionName: string, projection?: Record<string, any>) => async (req: Request, res: Response) => {
     try {
         const collection = collections[collectionName as keyof typeof collections];
         if (!collection) {
             return res.status(500).json({ error: "Collection not found" });
         }
 
-        const items = await collection.find({}, { projection }).toArray();
+        const filter = searchQueryBuilder(req, collectionName);
+        const items = await collection.find(filter, { projection }).toArray();
 
         res.status(200).json(items);
     } catch (error) {
@@ -25,7 +29,9 @@ export const getAllItems = (collectionName: string, projection?: Record<string, 
 
 /**
  * Get an item from a collection by _id
- * @param collectionName - the collection name
+ * If specified, only returns the fields in projection
+ * @param collectionName
+ * @param projection
  */
 export const getItemById = (collectionName: string, projection?: Record<string, any>) => async (req: Request, res: Response) => {
     try {
