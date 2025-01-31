@@ -1,4 +1,4 @@
-import {useState, type ChangeEvent, useEffect} from 'react';
+import { useState, type ChangeEvent, useEffect } from 'react';
 import { fetchBySearchTerm } from "../services/apiService.ts";
 import { HotelType } from "../types/HotelType.ts";
 import { CountryType } from "../types/CountryType.ts";
@@ -27,7 +27,6 @@ export function useSearch() {
                 setHotels([]);
                 setCountries([]);
                 setCities([]);
-                setShowClearBtn(false);
                 return;
             }
 
