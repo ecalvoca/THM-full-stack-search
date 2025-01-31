@@ -1,4 +1,6 @@
 import { Request } from "express";
+import { sanitizeString } from "./validator";
+
 
 /**
  * Builds a query to search by searchTerm for the collection with collectionName
@@ -7,9 +9,10 @@ import { Request } from "express";
  */
 export const searchQueryBuilder = (req: Request, collectionName: string): Record<string, any> => {
     let searchTerm = req.query.searchTerm as string;
-
     if (!searchTerm) return {};
-
+    //sanitize input
+    searchTerm = sanitizeString(searchTerm);
+    //build query
     switch (collectionName) {
         case "hotels":
             return {
