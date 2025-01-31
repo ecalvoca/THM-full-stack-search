@@ -90,7 +90,68 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 <!-- Write-up/conclusion section -->
 
-_When all the behaviour is implemented, feel free to add some observations or conclusions you like to share in the section_
+
+#### Description
+
+The search functionality allows users to find hotels, cities and countries based on the typed input. The search process and filtering happens in the backend using the capabilities of MongoDB, and works as follows:
+
+- Hotels: Matches the input string with a word in the hotel name. Also retrieves hotels located in countries where the country name starts with the input string.
+- Countries: Matches countries whose names start with the input string.
+- Cities: Matches cities whose names start with the input string.
+
+The filtering strategy is flexible and can be easily modified using the query builder, allowing future adjustments and refinements.
+
+When the close button is clicked, the search field and the results are cleared. Currently, the dropdown stays open to showcase that the results have been effectively cleared.
+
+When clicking on one of the hotels, countries or cities, the application redirects to their details page where their name is displayed. 
+The pages have currently a similar UI but have been implemented separately so that they can be customized and extended independently in the future.
+
+#### Packages
+
+Following packages have been added to the project:
+- react-router-dom
+- validator
+
+#### Tasks performed
+
+Backend:
+- Separated database logic into a dedicated service, ensuring that database connections are not repeatedly opened and closed on each API call.
+- Added API logic to: 
+  - fetch a single item by ID.
+  - fetch multiple items using a search term.
+- Developed a query builder for flexible and maintainable search queries.
+- Added input sanitization.
+- Optimized API responses by fetching only the necessary fields from the database.
+- Added indexes to improve database query performance.
+
+Frontend:
+- Created modular components (see components tree).
+- Implemented the functionality to clear search results.
+- Integrated react-router-dom to manage frontend routing.
+- Created dedicated pages.
+- Ensured filtering is handled in the backend to avoid unnecessary processing on the frontend.
+- Implemented a dedicated API service to handle backend interactions.
+- Implemented debouncing for API calls, reducing the amount of requests while searching.
+
+Components tree for the search functionality:
+
+<img src="./assets/search-components-tree.png" width="600px" />
+
+Detail pages:
+
+<img src="./assets/detail-pages.png" width="600px" />
+
+
+#### Suggestions
+
+Several potential improvements could enhance both the functionality and performance of the application further:
+- Limiting fetched and displayed results to improve performance and user experience. Implementing sorting mechanisms would help determine which results to display first (e.g. by location, popularity, rating).
+- Implementing a caching mechanism to store recent search results would help reduce redundant database queries and improve search performance.
+- Reintroducing filtering by hotel chain name and city. Initially the application supported filtering on these fields. Restoring this functionality in the future could improve search precision and user experience.
+- Displaying hotel locations in the results would provide more clarity to the end user.
+- Enhancing testing would improve system reliability. 
+- Other changes: logo192.png seems to be missing.
+
 
 ### Database structure
 
