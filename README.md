@@ -116,7 +116,7 @@ Following packages have been added to the project:
 
 Backend:
 - Separated database logic into a dedicated service, ensuring that database connections are not repeatedly opened and closed on each API call.
-- Added API logic to: 
+- Added routes and API logic to: 
   - fetch a single item by ID.
   - fetch multiple items using a search term.
 - Developed a query builder for flexible and maintainable search queries.
