@@ -1,7 +1,8 @@
 
-export default function ClearBtn({ onClick }) {
+
+export default function ClearBtn({ onClearClick }) {
     return (
-        <span className="left-pan" onClick={onClick}>
+        <span className="left-pan" onClick={onClearClick}>
             <i className="fa fa-close"></i>
         </span>
     );
