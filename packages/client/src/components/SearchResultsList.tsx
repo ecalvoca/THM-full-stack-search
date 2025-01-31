@@ -1,6 +1,7 @@
-import {CityType} from "../types/CityType.ts";
-import {CountryType} from "../types/CountryType.ts";
-import {HotelType} from "../types/HotelType.ts";
+import { CityType } from "../types/CityType.ts";
+import { CountryType } from "../types/CountryType.ts";
+import { HotelType } from "../types/HotelType.ts";
+import { Link } from "react-router-dom";
 
 interface SearchResultsListProps {
     results: (HotelType | CountryType | CityType)[];
@@ -18,10 +19,10 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results, page, ti
             ) : (
                 results.map((result) => (
                     <li key={result._id}>
-                        <a href={`/${page}/${result._id}`} className="dropdown-item">
+                        <Link to={`/${page}/${result._id}`} className="dropdown-item">
                             <i className="fa fa-building mr-2"></i>
                             {result.name}
-                        </a>
+                        </Link>
                         <hr className="divider"/>
                     </li>
                 ))
